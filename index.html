@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta content="IE=edge,chrome=1" http-equiv="X-UA-Compatible">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>API Reference</title>
+    <title>Tidal - a language for the live coding of pattern</title>
 
     <link href="stylesheets/screen.css" rel="stylesheet" type="text/css" media="screen" />
     <link href="stylesheets/print.css" rel="stylesheet" type="text/css" media="print" />
@@ -13,7 +13,7 @@
 
       <script>
         $(function() {
-          setupLanguages(["shell","ruby","python"]);
+          setupLanguages(["haskell"]);
         });
       </script>
   </head>
@@ -28,9 +28,7 @@
     <div class="tocify-wrapper">
       <img src="images/logo.png" />
         <div class="lang-selector">
-              <a href="#" data-language-name="shell">shell</a>
-              <a href="#" data-language-name="ruby">ruby</a>
-              <a href="#" data-language-name="python">python</a>
+              <a href="#" data-language-name="haskell">haskell</a>
         </div>
         <div class="search">
           <input type="text" class="search" id="input-search" placeholder="Search">
@@ -38,236 +36,332 @@
         <ul class="search-results"></ul>
       <div id="toc">
       </div>
-        <ul class="toc-footer">
-            <li><a href='#'>Sign Up for a Developer Key</a></li>
-            <li><a href='http://github.com/tripit/slate'>Documentation Powered by Slate</a></li>
-        </ul>
     </div>
     <div class="page-wrapper">
       <div class="dark-box"></div>
       <div class="content">
-        <h1 id="introduction">Introduction</h1>
+        
+          <h1 id="introduction">Introduction</h1>
 
-<p>Welcome to the Kittn API! You can use our API to access Kittn API endpoints, which can get information on various cats, kittens, and breeds in our database.</p>
+<p>Tidal is a language for <a href="http://toplap.org/">live coding</a> pattern. It
+provides a way to express music with very flexible timing, providing a
+little language for describing patterns as discrete sequences (which
+can be polyphonic and polymetric), some generators of continuous
+patterns (e.g. sinewaves, sawtooths) and a wide range of pattern
+transformations. Tidal is highly &lsquo;composable&rsquo; in that pattern
+transformations can be easily combined together, allowing you to
+quickly create complex patterns from simple ingredients.</p>
 
-<p>We have language bindings in Shell, Ruby, and Python! You can view code examples in the dark area to the right, and you can switch the programming language of the examples with the tabs in the top right.</p>
+<p>Tidal does not make sound itself, but rather controls synths using
+Open Sound Control or MIDI. By default, for its sister the Dirt
+sampler.</p>
 
-<p>This example API documentation page was created with <a href="http://github.com/tripit/slate">Slate</a>. Feel free to edit it and use it as a base for your own API&rsquo;s documentation.</p>
+<p>To see and hear Tidal in action, check out
+<a href="http://tidal.lurk.org/videos.html">some of the videos</a> of demos and
+performances.</p>
 
-<h1 id="authentication">Authentication</h1>
+<p>Tidal is embedded in the Haskell language. You don&rsquo;t really have to
+learn Haskell to use Tidal, but it might help to pick up an
+introduction. You could try Graham Hutton&rsquo;s &ldquo;Programming in Haskell&rdquo;
+or Miran Lipova?a&rsquo;s
+<a title="which has a free online version" href="http://learnyouahaskell.com/">Learn you a Haskell for Great Good</a> . Or, you could try learning enough
+syntax to get by just by playing around with Tidal..</p>
 
-<blockquote>
-<p>To authorize, use this code:</p>
-</blockquote>
-<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
+          <h1 id="installation">Installation</h1>
 
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre>
-<pre class="highlight python"><code><span class="kn">import</span> <span class="nn">kittn</span>
+<h2 id="linux-installation-script">Linux installation script</h2>
 
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-</code></pre>
-<pre class="highlight shell"><code><span class="c"># With shell, you can just pass the correct header with each request</span>
-curl <span class="s2">"api_endpoint_here"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
-</code></pre>
+<p>If you use Debian, or a related distribution such as Ubuntu, the
+following script should install tidal, dirt and its dependencies for
+you. Follow the link, then click &lsquo;raw&rsquo; to download the file:</p>
 
-<blockquote>
-<p>Make sure to replace <code class="prettyprint">meowmeowmeow</code> with your API key.</p>
-</blockquote>
+<p><a href="https://github.com/yaxu/Tidal/blob/master/doc/install-linux.sh">https://github.com/yaxu/Tidal/blob/master/doc/install-linux.sh</a></p>
 
-<p>Kittn uses API keys to allow access to the API. You can register a new Kittn API key at our <a href="http://example.com/developers">developer portal</a>.</p>
-
-<p>Kittn expects for the API key to be included in all API requests to the server in a header that looks like the following:</p>
-
-<p><code class="prettyprint">Authorization: meowmeowmeow</code></p>
-
-<aside class="notice">
-You must replace <code>meowmeowmeow</code> with your personal API key.
-</aside>
-
-<h1 id="kittens">Kittens</h1>
-
-<h2 id="get-all-kittens">Get All Kittens</h2>
-<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span>
-</code></pre>
-<pre class="highlight python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">()</span>
-</code></pre>
-<pre class="highlight shell"><code>curl <span class="s2">"http://example.com/api/kittens"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
+<p>Then open a terminal window, and type the following</p>
+<pre class="highlight shell"><code><span class="nb">cd</span> ~/Downloads
+bash install-linux.sh
 </code></pre>
 
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json"><code><span class="p">[</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">1</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Fluffums"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"calico"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">6</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">7</span><span class="w">
-  </span><span class="p">},</span><span class="w">
-  </span><span class="p">{</span><span class="w">
-    </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isis"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-    </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-  </span><span class="p">}</span><span class="w">
-</span><span class="p">]</span><span class="w">
-</span></code></pre>
+<p>You&rsquo;ll need to change <code class="prettyprint">~/Downloads</code> to the location that your web
+browser saved the <code class="prettyprint">install-linux.sh</code> file.</p>
 
-<p>This endpoint retrieves all kittens.</p>
+<p>Once you have run the script, log out and then back in again (to
+ensure you have the right group settings), and if all is well, you
+should be good to skip ahead to &ldquo;Starting dirt&rdquo;.</p>
 
-<h3 id="http-request">HTTP Request</h3>
+<h2 id="linux-installation-by-hand">Linux installation by hand</h2>
 
-<p><code class="prettyprint">GET http://example.com/api/kittens</code></p>
+<p>Unless otherwise specified, you will need to run the commands in a
+terminal window.</p>
 
-<h3 id="query-parameters">Query Parameters</h3>
+<h3 id="installing-dirt-by-hand">Installing Dirt by hand</h3>
 
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Default</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>include_cats</td>
-<td>false</td>
-<td>If set to true, the result will also include cats.</td>
-</tr>
-<tr>
-<td>available</td>
-<td>true</td>
-<td>If set to false, the result will include kittens that have already been adopted.</td>
-</tr>
-</tbody></table>
+<p>Tidal does not include a synthesiser, but instead communicates with an
+external synthesiser using the Open Sound Control protocol. It has
+been developed for use with a particular software sampler called
+&ldquo;dirt&rdquo;. You&rsquo;ll need to run it with &ldquo;jack audio&rdquo;.</p>
 
-<aside class="success">
-Remember — a happy kitten is an authenticated kitten!
-</aside>
-
-<h2 id="get-a-specific-kitten">Get a Specific Kitten</h2>
-<pre class="highlight ruby"><code><span class="nb">require</span> <span class="s1">'kittn'</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="no">Kittn</span><span class="o">::</span><span class="no">APIClient</span><span class="p">.</span><span class="nf">authorize!</span><span class="p">(</span><span class="s1">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="p">.</span><span class="nf">kittens</span><span class="p">.</span><span class="nf">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre>
-<pre class="highlight python"><code><span class="kn">import</span> <span class="nn">kittn</span>
-
-<span class="n">api</span> <span class="o">=</span> <span class="n">kittn</span><span class="o">.</span><span class="n">authorize</span><span class="p">(</span><span class="s">'meowmeowmeow'</span><span class="p">)</span>
-<span class="n">api</span><span class="o">.</span><span class="n">kittens</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
-</code></pre>
-<pre class="highlight shell"><code>curl <span class="s2">"http://example.com/api/kittens/2"</span>
-  -H <span class="s2">"Authorization: meowmeowmeow"</span>
+<p>Here&rsquo;s how to install dirt under Debian, Ubuntu or a similar distribution:</p>
+<pre class="highlight shell"><code>sudo apt-get install build-essential libsndfile1-dev libsamplerate0-dev <span class="se">\</span>
+                     liblo-dev libjack-jackd2-dev qjackctl jackd git
+git clone --recursive https://github.com/tidalcycles/Dirt.git
+<span class="nb">cd </span>Dirt
+make clean; make
 </code></pre>
 
-<blockquote>
-<p>The above command returns JSON structured like this:</p>
-</blockquote>
-<pre class="highlight json"><code><span class="p">{</span><span class="w">
-  </span><span class="nt">"id"</span><span class="p">:</span><span class="w"> </span><span class="mi">2</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"name"</span><span class="p">:</span><span class="w"> </span><span class="s2">"Isis"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"breed"</span><span class="p">:</span><span class="w"> </span><span class="s2">"unknown"</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"fluffiness"</span><span class="p">:</span><span class="w"> </span><span class="mi">5</span><span class="p">,</span><span class="w">
-  </span><span class="nt">"cuteness"</span><span class="p">:</span><span class="w"> </span><span class="mi">10</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
+<h3 id="installing-tidal-by-hand">Installing Tidal by hand</h3>
 
-<p>This endpoint retrieves a specific kitten.</p>
+<p>Tidal is embedded in the Haskell language, so you&rsquo;ll have to install
+the haskell interpreter and some libraries, including tidal
+itself. Under debian, you&rsquo;d install haskell like this:</p>
+<pre class="highlight shell"><code>sudo apt-get install ghc zlib1g-dev cabal-install
+</code></pre>
 
-<aside class="warning">If you&rsquo;re not using an administrator API key, note that some kittens will return 403 Forbidden if they are hidden for admins only.</aside>
+<p>Or otherwise could grab the <a href="http://www.haskell.org/platform/">haskell platform</a></p>
 
-<h3 id="http-request">HTTP Request</h3>
+<p>Once Haskell is installed, you can install tidal like this:</p>
+<pre class="highlight shell"><code>cabal update
+cabal install tidal
+</code></pre>
 
-<p><code class="prettyprint">GET http://example.com/kittens/&lt;ID&gt;</code></p>
+<p>You will have to start dirt every time you want to run Tidal,
+otherwise there will be no sound.</p>
 
-<h3 id="url-parameters">URL Parameters</h3>
+<p>Now you need to install and configure an editor, following the
+instructions below. For beginners, the Atom editor is recommended.</p>
 
-<table><thead>
-<tr>
-<th>Parameter</th>
-<th>Description</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>ID</td>
-<td>The ID of the kitten to retrieve</td>
-</tr>
-</tbody></table>
+<h3 id="starting-dirt">Starting Dirt</h3>
 
-          <h1 id="errors">Errors</h1>
+<p>Before you use Tidal, you&rsquo;ll need to start the Dirt synth.</p>
 
-<aside class="notice">This error section is stored in a separate file in `includes/_errors.md`. Slate allows you to optionally separate out your docs into many files&hellip;just save them to the `includes` folder and add them to the top of your `index.md`&rsquo;s frontmatter. Files are included in the order listed.</aside>
+<p>First of all, start the &ldquo;jack&rdquo; audio layer. The easier way to do this
+is with the &ldquo;qjackctl&rdquo; app, which you should find in your program
+menus under &ldquo;Sound &amp; Video&rdquo; or similar. If you have trouble with
+qjackctl, you can also try starting jack directly from the
+commandline:</p>
+<pre class="highlight shell"><code>jackd -d alsa &amp;
+</code></pre>
 
-<p>The Kittn API uses the following error codes:</p>
+<p>If that doesn&rsquo;t work, you might well have something called
+&ldquo;pulseaudio&rdquo; in control of your sound. In that case, this should work:</p>
+<pre class="highlight shell"><code>/usr/bin/pasuspender -- jackd -d alsa &amp;
+</code></pre>
 
-<table><thead>
-<tr>
-<th>Error Code</th>
-<th>Meaning</th>
-</tr>
-</thead><tbody>
-<tr>
-<td>400</td>
-<td>Bad Request &ndash; Your request sucks</td>
-</tr>
-<tr>
-<td>401</td>
-<td>Unauthorized &ndash; Your API key is wrong</td>
-</tr>
-<tr>
-<td>403</td>
-<td>Forbidden &ndash; The kitten requested is hidden for administrators only</td>
-</tr>
-<tr>
-<td>404</td>
-<td>Not Found &ndash; The specified kitten could not be found</td>
-</tr>
-<tr>
-<td>405</td>
-<td>Method Not Allowed &ndash; You tried to access a kitten with an invalid method</td>
-</tr>
-<tr>
-<td>406</td>
-<td>Not Acceptable &ndash; You requested a format that isn&rsquo;t json</td>
-</tr>
-<tr>
-<td>410</td>
-<td>Gone &ndash; The kitten requested has been removed from our servers</td>
-</tr>
-<tr>
-<td>418</td>
-<td>I&rsquo;m a teapot</td>
-</tr>
-<tr>
-<td>429</td>
-<td>Too Many Requests &ndash; You&rsquo;re requesting too many kittens! Slow down!</td>
-</tr>
-<tr>
-<td>500</td>
-<td>Internal Server Error &ndash; We had a problem with our server. Try again later.</td>
-</tr>
-<tr>
-<td>503</td>
-<td>Service Unavailable &ndash; We&rsquo;re temporarially offline for maintanance. Please try again later.</td>
-</tr>
-</tbody></table>
+<p>And finally you should be able to start dirt with this:</p>
+<pre class="highlight shell"><code><span class="nb">cd</span> ~/Dirt
+./dirt &amp;
+</code></pre>
 
+<p>If you have problems with jack, try enabling realtime audio, and
+adjusting the settings by installing and using the &ldquo;qjackctl&rdquo;
+software. Some more info can be found in the <a href="https://help.ubuntu.com/community/HowToJACKConfiguration">Ubuntu Community page for JACK configuration</a></p>
+
+<p><strong>You will have to start dirt every time you want to run Tidal,
+otherwise there will be no sound.</strong></p>
+
+<h2 id="osx">OSX</h2>
+
+<p>Installing Tidal&rsquo;s dependencies on Mac OS X can be done via homebrew or MacPorts, but choose only one to avoid conflicts with duplicate system libraries.</p>
+
+<p>Unless otherwise specified, the below commands should be typed or pasted into a terminal window.</p>
+
+<h3 id="dirt">Dirt</h3>
+
+<h3 id="installing-dependencies-via-homebrew">Installing dependencies via Homebrew</h3>
+
+<p><a href="http://brew.sh">Homebrew</a> is a package manager for OS X. It lives side by side with the native libraries and tools that ship with the operating system.</p>
+
+<p>To install homebrew:</p>
+<pre class="highlight shell"><code>ruby -e <span class="s2">"</span><span class="k">$(</span>curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install<span class="k">)</span><span class="s2">"</span>
+</code></pre>
+
+<p>Initialise homebrew:</p>
+<pre class="highlight shell"><code>brew doctor
+</code></pre>
+
+<p>Install Dirt, a synth (well, more of a sampler) made to work with
+Tidal. A homebrew &#39;recipe&rsquo; for dirt does exist, but that doesn&rsquo;t come
+with any sounds to play with, so for now it&rsquo;s probably easiest just
+download it all from github and compile it as follows.</p>
+
+<p>Install some libraries which the Dirt synth needs to compile:</p>
+<pre class="highlight shell"><code>brew install liblo libsndfile libsamplerate
+</code></pre>
+
+<p>Install the &#39;jack audio connection kit&rsquo; which Dirt also needs:</p>
+<pre class="highlight shell"><code>brew install jack
+</code></pre>
+
+<p>{% capture jackosx %}
+<strong>Note:</strong> If Homebrew&rsquo;s installation of Jack fails with a <code class="prettyprint">make</code> error, you can use the <a href="http://www.jackosx.com/download.html">JackOSX Installer</a> instead. This will, however, add an additional step when installing Dirt (see below).
+{% endcapture %}
+{% include alert.html content=jackosx %}</p>
+
+<h3 id="alternative-installing-dependencies-via-mac-ports">Alternative: Installing dependencies via Mac Ports</h3>
+
+<p><a href="https://www.macports.org/">MacPorts</a> is another package manager for OS X.
+If you already installed dependencies via homebrew, skip ahead to build Dirt.
+Otherwise if you happen to already use MacPorts, here&rsquo;s a list of steps in order to get all dependencies:</p>
+<pre class="highlight shell"><code>sudo port install liblo libsndfile libsamplerate
+</code></pre>
+
+<p>Download and install jack2 <a href="http://jackaudio.org/downloads/">Jack Download Page</a>. Jack 2 has better OS X integration <a href="https://github.com/jackaudio/jackaudio.github.com/wiki/Q_difference_jack1_jack2">Jack Comparison</a>.</p>
+
+<h3 id="building-dirt-from-source">Building Dirt from source</h3>
+
+<p>Get the source code for the Dirt synth:</p>
+<pre class="highlight shell"><code><span class="nb">cd</span> ~
+git clone --recursive https://github.com/tidalcycles/Dirt.git
+</code></pre>
+
+<p>Compile dirt:</p>
+<pre class="highlight shell"><code><span class="nb">cd</span> ~/Dirt
+make clean; make
+</code></pre>
+
+<p>{% capture dirtcompile %}
+If Dirt fails to compile after using the JackOSX installer as above, you may need to add flags to the Makefile to specify the appropriate paths:</p>
+<pre class="highlight make"><code><span class="nv">CFLAGS</span> <span class="o">+=</span> -g -I/usr/local/include -Wall -O3 -std<span class="o">=</span>gnu99 -DCHANNELS<span class="o">=</span>2
+<span class="nv">LDFLAGS</span> <span class="o">+=</span> -lm -L/usr/local/lib -llo -lsndfile -lsamplerate -ljack
+</code></pre>
+
+<p>{% endcapture %}
+{% include alert.html content=dirtcompile caption=&ldquo;Homebrew users&rdquo; %}</p>
+
+<p>{% capture dirtcompileport %}
+As MacPorts installs all libs on <code class="prettyprint">/opt/local/</code>
+edit the Makefile to point the right direction of <code class="prettyprint">libsndfile</code> and <code class="prettyprint">libsamplerate</code></p>
+<pre class="highlight make"><code><span class="nv">CFLAGS</span> <span class="o">+=</span> -g -I/opt/local/include -Wall -O3 -std<span class="o">=</span>gnu99
+<span class="nv">LDFLAGS</span> <span class="o">+=</span> -lm -L/opt/local/lib  -llo -lsndfile -lsamplerate
+</code></pre>
+
+<p>{% endcapture %}
+{% include alert.html content=dirtcompileport caption=&ldquo;MacPorts users&rdquo; %}</p>
+
+<h3 id="haskell">Haskell</h3>
+
+<p>get the binary installer for <a href="https://www.haskell.org/platform/mac.html">the haskell platform</a>.
+Or you might get it from homebrew (this takes a while)</p>
+<pre class="highlight shell"><code>brew install haskell-platform
+</code></pre>
+
+<p>Or, if using MacPorts:</p>
+<pre class="highlight shell"><code>sudo port install haskell-platform
+</code></pre>
+
+<p>Install Tidal itself:</p>
+<pre class="highlight shell"><code>cabal update
+cabal install cabal-install
+cabal install tidal
+</code></pre>
+
+<p>Now you have to start dirt, the synthesizer/sampler, before getting a
+code editor going. So back in a terminal window, start jack:</p>
+<pre class="highlight shell"><code>jackd -d coreaudio &amp;
+</code></pre>
+
+<p>Or, if you downloaded Jack 2, then start the JackPilot at:
+/Applications/Jack/JackPilot.app
+Click <strong>start</strong> button.</p>
+
+<p>Then start dirt:</p>
+<pre class="highlight shell"><code><span class="nb">cd</span> ~/Dirt
+./dirt &amp;
+</code></pre>
+
+<p>You will have to start dirt every time you want to run Tidal,
+otherwise there will be no sound.</p>
+
+<p>Now you need to install and configure an editor, following the
+instructions below. For beginners, the Atom editor is recommended.</p>
+
+<h2 id="windows">Windows</h2>
+
+<p>This is a rough set of instructions based on information from the
+Tidal mailing list. There is a <a href="https://www.youtube.com/watch?v=KPCRUuYsb5M">fine youtube
+video</a> that takes you
+through this process step-by-step.</p>
+
+<h3 id="cygwin">Cygwin</h3>
+
+<p>First, install <a href="https://www.cygwin.com">Cygwin</a>. In Cygwin, make sure the
+following packages are installed:</p>
+<pre class="highlight plaintext"><code>git
+gcc-core
+make
+gcc-g++
+libsndfile
+libsndfile-devel
+libsamplerate
+libsamplerate-devel
+</code></pre>
+
+<h3 id="portaudio">Portaudio</h3>
+
+<p>Download Portaudio from http://www.portaudio.com. In Cygwin, Unpack
+the download with <code class="prettyprint">tar fxvz</code>. After unpacking, from Cygwin, go to the directory
+where you unpacked Portaudio and then run:</p>
+<pre class="highlight shell"><code>./configure <span class="o">&amp;&amp;</span> make <span class="o">&amp;&amp;</span> make install
+</code></pre>
+
+<h3 id="liblo">Liblo</h3>
+
+<p>Download <a href="http://liblo.sourceforge.net">Liblo</a>.
+In Cygwin, unpack Liblo with <code class="prettyprint">tar fxvz</code>, then in Cygwin go to the directory where you
+unpacked Liblo and then run:</p>
+<pre class="highlight shell"><code>./configure <span class="o">&amp;&amp;</span> make <span class="o">&amp;&amp;</span> make install
+</code></pre>
+
+<h3 id="dirt">Dirt</h3>
+
+<p>In Cygwin:</p>
+<pre class="highlight shell"><code>git clone --recursive http://github.com/tidalcycles/Dirt.git
+</code></pre>
+
+<p>Then:</p>
+<pre class="highlight shell"><code><span class="nb">cd </span>Dirt
+make dirt-pa
+</code></pre>
+
+<p>Then you get a <code class="prettyprint">dirt-pa.exe</code> that works. Maybe this even works on any
+windows system without having to compile. You&rsquo;d need <code class="prettyprint">cygwin1.dll</code> at
+least though.</p>
+
+<h3 id="haskell">Haskell</h3>
+
+<p><a href="https://www.haskell.org/platform/">Download and install the haskell platform</a>.</p>
+
+<p><em>You will then either need to restart Cygwin or reload your Cygwin profile to re-load <code class="prettyprint">cabal</code> on your path.</em></p>
+
+<p>Then back in Cygwin:</p>
+<pre class="highlight shell"><code>cabal update
+</code></pre>
+
+<p>At this point, you may be notified to update <code class="prettyprint">cabal-install</code>. You can do so by typing:</p>
+<pre class="highlight shell"><code>cabal install cabal-install
+</code></pre>
+
+<p>Then finally, install the Tidal package:</p>
+<pre class="highlight shell"><code>cabal install tidal
+</code></pre>
+
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
+          
       </div>
       <div class="dark-box">
           <div class="lang-selector">
-                <a href="#" data-language-name="shell">shell</a>
-                <a href="#" data-language-name="ruby">ruby</a>
-                <a href="#" data-language-name="python">python</a>
+                <a href="#" data-language-name="haskell">haskell</a>
           </div>
       </div>
     </div>
