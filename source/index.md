@@ -6,22 +6,7 @@ language_tabs:
 
 includes:
   - introduction
-  - installation
-  - gettingstarted
-  - synthparams
   - patterntransformers
-  - sampletransformers
-  - conditionalfunctions
-  - compositionalfunctions
-  - combiningpatterns
-  - utilityfunctions
-  - midi
-  - concepts
-  - publications
-  - community
-  - videos
 
 search: true
 ---
-
-
